@@ -1,0 +1,137 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-bg: #FDFCFB;
+    --color-surface: #FFFFFF;
+    --color-surface-raised: #FAFAF9;
+    --color-border: #E8E5E1;
+    --color-border-subtle: #F0EDE9;
+    --color-text-primary: #28241F;
+    --color-text-secondary: #7A706A;
+    --color-text-muted: #9A9088;
+    --color-accent: #F59E0B;
+    --color-accent-hover: #D97706;
+    --color-accent-subtle: #FEF3C7;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-text-primary);
+    font-family: 'DM Sans', system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  h1, h2, h3 {
+    font-family: 'Playfair Display', Georgia, serif;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+  }
+
+  ::selection {
+    background: #FDE68A;
+    color: #28241F;
+  }
+
+  input, textarea, select {
+    font-family: 'DM Sans', system-ui, sans-serif;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl
+           bg-stone-900 text-white text-sm font-medium
+           transition-all duration-200
+           hover:bg-stone-800 active:scale-[0.98]
+           disabled:opacity-40 disabled:cursor-not-allowed disabled:active:scale-100;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl
+           bg-white text-stone-800 text-sm font-medium border border-stone-200
+           transition-all duration-200
+           hover:bg-stone-50 hover:border-stone-300 active:scale-[0.98]
+           disabled:opacity-40 disabled:cursor-not-allowed;
+  }
+
+  .btn-accent {
+    @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl
+           bg-amber-500 text-white text-sm font-medium
+           transition-all duration-200
+           hover:bg-amber-600 active:scale-[0.98]
+           disabled:opacity-40 disabled:cursor-not-allowed;
+  }
+
+  .input-base {
+    @apply w-full px-4 py-2.5 rounded-xl border border-stone-200 bg-white
+           text-stone-900 text-sm placeholder:text-stone-400
+           transition-all duration-200
+           focus:outline-none focus:border-amber-400 focus:ring-2 focus:ring-amber-100
+           disabled:bg-stone-50 disabled:text-stone-400 disabled:cursor-not-allowed;
+  }
+
+  .card {
+    @apply bg-white rounded-2xl border border-stone-100 shadow-card;
+  }
+
+  .badge {
+    @apply inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium;
+  }
+
+  .badge-positive {
+    @apply badge bg-green-50 text-green-700 border border-green-100;
+  }
+
+  .badge-negative {
+    @apply badge bg-red-50 text-red-700 border border-red-100;
+  }
+
+  .badge-neutral {
+    @apply badge bg-stone-100 text-stone-600 border border-stone-200;
+  }
+
+  .badge-warning {
+    @apply badge bg-amber-50 text-amber-700 border border-amber-100;
+  }
+
+  .badge-heuristic {
+    @apply badge bg-blue-50 text-blue-700 border border-blue-100;
+  }
+
+  .shimmer {
+    background: linear-gradient(
+      90deg,
+      #f0ede9 0px,
+      #e8e5e1 40px,
+      #f0ede9 80px
+    );
+    background-size: 600px;
+    animation: shimmer 1.8s ease-in-out infinite;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .animate-in {
+    animation: slideUp 0.35s ease forwards;
+  }
+}
