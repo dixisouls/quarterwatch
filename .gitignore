@@ -18,7 +18,8 @@ var/
 sdist/
 develop-eggs/
 .installed.cfg
-lib/
+/backend/lib/
+/lib/
 lib64/
 .Python
 pip-log.txt
