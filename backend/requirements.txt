@@ -18,3 +18,4 @@ tenacity==8.3.0
 python-dotenv==1.0.1
 bcrypt==4.0.1
 grpcio==1.63.0
+google-genai==1.73.1
