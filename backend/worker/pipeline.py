@@ -8,6 +8,7 @@ from backend.services.job_service import get_job_by_id, update_job_status
 from backend.services.transcript_service import fetch_transcript
 from backend.services.segmentation_service import segment_transcript
 from backend.services.sentiment_service import run_sentiment_for_job
+from backend.services.confidence_service import score_confidence_for_job
 
 logger = logging.getLogger("worker.pipeline")
 
@@ -74,8 +75,12 @@ async def run_pipeline(job_id: uuid.UUID) -> None:
             logger.info(f"[sentiment] Stored {len(sentiment_results)} sentiment results for job {job_id}")
 
             # Stage 4: Confidence scoring (stub)
-            logger.info(f"[pipeline] Job {job_id} — stage: confidence scoring (stub)")
-            await asyncio.sleep(1)
+            logger.info(f"[pipeline] Job {job_id} — stage: confidence scoring")
+            confidence_results = await score_confidence_for_job(db, job_id)
+            for result in confidence_results:
+                db.add(result)
+            await db.commit()
+            logger.info(f"[confidence] Stored {len(confidence_results)} confidence results for job {job_id}")
 
             # Stage 5: Named entity extraction (stub)
             logger.info(f"[pipeline] Job {job_id} — stage: entity extraction (stub)")
