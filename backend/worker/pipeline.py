@@ -11,6 +11,7 @@ from backend.services.sentiment_service import run_sentiment_for_job
 from backend.services.confidence_service import score_confidence_for_job
 from backend.services.entity_service import extract_entities_for_job
 from backend.services.summary_service import generate_summaries_for_job
+from backend.services.faithfulness_service import run_faithfulness_checks_for_job
 
 logger = logging.getLogger("worker.pipeline")
 
@@ -100,9 +101,11 @@ async def run_pipeline(job_id: uuid.UUID) -> None:
             await db.commit()
             logger.info(f"[summary] Stored {len(summaries)} summaries for job {job_id}")
 
-            # Stage 7: Faithfulness check (stub)
+            # Stage 7: Faithfulness check 
             logger.info(f"[pipeline] Job {job_id} — stage: faithfulness check (stub)")
-            await asyncio.sleep(1)
+            await run_faithfulness_checks_for_job(db, job_id)
+            await db.commit()
+            logger.info(f"[faithfulness] Stored {len(summaries)} faithfulness results for job {job_id}")
 
             await update_job_status(db, job_id, JobStatus.complete)
             await db.commit()
