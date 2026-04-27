@@ -134,4 +134,12 @@
   .animate-in {
     animation: slideUp 0.35s ease forwards;
   }
+
+  .phrase-shimmer {
+    background: linear-gradient(90deg, #1c1917 35%, #a8a29e 50%, #1c1917 65%);
+    background-size: 1200px 100%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
 }
