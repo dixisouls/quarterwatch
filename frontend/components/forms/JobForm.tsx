@@ -1,8 +1,61 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { submitJob, uploadTranscript, getApiError } from "@/lib/api";
 import { useJobPolling } from "@/hooks/useJobPolling";
 import { Spinner } from "@/components/ui/Spinner";
 import type { Quarter } from "@/types";
+
+const PIPELINE_PHRASES = [
+  "Gathering insights...",
+  "Doing this for you...",
+  "Reading between the lines...",
+  "Crunching the numbers...",
+  "Listening in on the call...",
+  "Taking notes...",
+  "Parsing the Q&A...",
+  "Fact-checking claims...",
+  "Connecting the dots...",
+  "Running the analysis...",
+  "Digging into the transcript...",
+  "Extracting the signal...",
+  "Separating noise from news...",
+  "Following the money...",
+  "Decoding executive speak...",
+  "Finding the key moments...",
+  "Watching for red flags...",
+  "Scoring the sentiment...",
+  "Mapping the entities...",
+  "Summarising for you...",
+  "Cross-referencing claims...",
+  "Checking the footnotes...",
+  "Auditing the narrative...",
+  "Spotting the hedges...",
+  "Catching the bold claims...",
+  "Weighing the confidence...",
+  "Almost there...",
+  "Processing the alpha...",
+  "Reading the room...",
+  "Translating corporate...",
+  "Flagging the guidance...",
+  "Noting the tone shifts...",
+  "Marking the key phrases...",
+  "Indexing the call...",
+  "Verifying the summary...",
+  "Catching the fine print...",
+  "Listening closely...",
+  "Pulling out the highlights...",
+  "Annotating the transcript...",
+  "Building your report...",
+  "Making sense of it all...",
+  "Working on it...",
+  "On it...",
+  "Running the pipeline...",
+  "Give us a moment...",
+  "Worth the wait...",
+  "Unpacking the earnings...",
+  "Reviewing the call...",
+  "Deep in the transcript...",
+  "Finding what matters...",
+];
 
 const QUARTERS: Quarter[] = ["Q1", "Q2", "Q3", "Q4"];
 const CURRENT_YEAR = new Date().getFullYear();
@@ -19,6 +72,15 @@ export function JobForm() {
   const [uploadingTranscript, setUploadingTranscript] = useState(false);
 
   const { status, jobData, isPolling } = useJobPolling(activeJobId);
+  const [phrase, setPhrase] = useState(() => PIPELINE_PHRASES[Math.floor(Math.random() * PIPELINE_PHRASES.length)]);
+
+  useEffect(() => {
+    if (status !== "processing") return;
+    const id = setInterval(() => {
+      setPhrase(PIPELINE_PHRASES[Math.floor(Math.random() * PIPELINE_PHRASES.length)]);
+    }, 5000);
+    return () => clearInterval(id);
+  }, [status]);
 
   const validateTicker = (v: string): boolean => /^[A-Z]{1,5}$/.test(v);
 
@@ -116,10 +178,14 @@ export function JobForm() {
     return (
       <div className="card p-8 animate-in">
         <div className="mb-6">
-          <p className="font-semibold text-stone-900">
-            {status === "pending" && "Queuing analysis..."}
-            {status === "processing" && "Pipeline running..."}
-          </p>
+          {status === "pending" && (
+            <p className="font-semibold text-stone-900">Queuing analysis...</p>
+          )}
+          {status === "processing" && (
+            <p key={phrase} className="font-semibold animate-slide-up">
+              <span className="phrase-shimmer" style={{ animation: "shimmer 2s linear infinite" }}>{phrase}</span>
+            </p>
+          )}
           <p className="text-sm text-stone-500 mt-0.5">
             Analysing{" "}
             <span className="font-mono font-medium text-stone-700">
