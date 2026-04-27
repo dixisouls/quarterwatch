@@ -60,6 +60,7 @@ interface SegmentCardProps {
 }
 
 export function SegmentCard({ segment, index }: SegmentCardProps) {
+  const [cardExpanded, setCardExpanded] = useState(false);
   const [expanded, setExpanded] = useState(false);
 
   const sentiment = segment.sentiment;
@@ -75,7 +76,10 @@ export function SegmentCard({ segment, index }: SegmentCardProps) {
       style={{ animationDelay: `${index * 0.08}s` }}
     >
       {/* Header */}
-      <div className="px-6 py-5 border-b border-stone-50">
+      <div
+        className="px-6 py-5 border-b border-stone-50 cursor-pointer select-none"
+        onClick={() => setCardExpanded(!cardExpanded)}
+      >
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-center gap-3">
             <span className="text-xs font-mono text-stone-400 bg-stone-50 border border-stone-100 rounded-md px-2 py-0.5">
@@ -86,10 +90,18 @@ export function SegmentCard({ segment, index }: SegmentCardProps) {
             </h3>
           </div>
 
-          <div className="flex items-center gap-2 flex-shrink-0">
+          <div className="flex items-center gap-3 flex-shrink-0">
             <span className="text-xs text-stone-400 font-mono">
               {segment.word_count.toLocaleString()} words
             </span>
+            <svg
+              className={cn("w-4 h-4 text-stone-400 transition-transform", cardExpanded && "rotate-90")}
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
           </div>
         </div>
 
@@ -156,13 +168,13 @@ export function SegmentCard({ segment, index }: SegmentCardProps) {
           )}
 
           {/* Summary method */}
-          {summary?.summary_method === "extractive" && (
+          {cardExpanded && summary?.summary_method === "extractive" && (
             <span className="badge badge-warning">Extractive summary</span>
           )}
         </div>
 
         {/* Confidence phrases */}
-        {confidence && ((confidence.key_phrases?.length ?? 0) > 0 || (confidence.hedging_phrases?.length ?? 0) > 0) && (
+        {cardExpanded && confidence && ((confidence.key_phrases?.length ?? 0) > 0 || (confidence.hedging_phrases?.length ?? 0) > 0) && (
           <div className="flex flex-wrap items-start gap-x-4 gap-y-2 mt-3">
             {(confidence.key_phrases?.length ?? 0) > 0 && (
               <div className="flex flex-wrap items-center gap-1.5">
@@ -189,7 +201,7 @@ export function SegmentCard({ segment, index }: SegmentCardProps) {
       </div>
 
       {/* Summary */}
-      {summary ? (
+      {cardExpanded && summary ? (
         <div className="px-6 py-5 border-b border-stone-50">
           {summary.faithfulness_status === "unverified" && (
             <div className="flex items-start gap-2.5 mb-3 p-3 bg-red-50 border border-red-100 rounded-xl">
@@ -237,7 +249,7 @@ export function SegmentCard({ segment, index }: SegmentCardProps) {
       ) : null}
 
       {/* Entities */}
-      {entities.length > 0 && (() => {
+      {cardExpanded && entities.length > 0 && (() => {
         const grouped = entities.reduce<Record<string, typeof entities>>((acc, e) => {
           const key = e.entity_type ?? "Other";
           (acc[key] ??= []).push(e);
@@ -275,7 +287,7 @@ export function SegmentCard({ segment, index }: SegmentCardProps) {
       })()}
 
       {/* Expand source text */}
-      <div className="px-6 py-3">
+      {cardExpanded && <div className="px-6 py-3">
         <button
           onClick={() => setExpanded(!expanded)}
           className="flex items-center gap-1.5 text-xs text-stone-400 hover:text-stone-600 transition-colors"
@@ -302,7 +314,7 @@ export function SegmentCard({ segment, index }: SegmentCardProps) {
             </p>
           </div>
         )}
-      </div>
+      </div>}
     </div>
   );
 }
