@@ -7,6 +7,7 @@ from backend.models.models import JobStatus, Segment, SentimentResult, Sentiment
 from backend.services.job_service import get_job_by_id, update_job_status
 from backend.services.transcript_service import fetch_transcript
 from backend.services.segmentation_service import segment_transcript
+from backend.services.sentiment_service import run_sentiment_for_job
 
 logger = logging.getLogger("worker.pipeline")
 
@@ -60,11 +61,17 @@ async def run_pipeline(job_id: uuid.UUID) -> None:
                 )
                 db.add(segment)
             await db.commit()
+
             logger.info(f"[segmentation] Created {len(segments)} segments for job {job_id}")
             
             # Stage 3: Sentiment (stub)
-            logger.info(f"[pipeline] Job {job_id} — stage: sentiment scoring (stub)")
-            await asyncio.sleep(1)
+            logger.info(f"[pipeline] Job {job_id} — stage: sentiment scoring")
+            
+            sentiment_results = await run_sentiment_for_job(db, job_id)
+            for result in sentiment_results:
+                db.add(result)
+            await db.commit()
+            logger.info(f"[sentiment] Stored {len(sentiment_results)} sentiment results for job {job_id}")
 
             # Stage 4: Confidence scoring (stub)
             logger.info(f"[pipeline] Job {job_id} — stage: confidence scoring (stub)")
