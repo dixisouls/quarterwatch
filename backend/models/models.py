@@ -83,6 +83,7 @@ class Job(Base):
     error_message: Mapped[str | None] = mapped_column(Text)
     transcript_gcs_path: Mapped[str | None] = mapped_column(Text)
     segmentation_notice: Mapped[str | None] = mapped_column(Text)
+    pipeline_stage: Mapped[int | None] = mapped_column(Integer, nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
     updated_at: Mapped[datetime] = mapped_column(
         DateTime, default=datetime.utcnow, onupdate=datetime.utcnow
