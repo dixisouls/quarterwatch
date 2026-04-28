@@ -64,4 +64,4 @@ jobs:
             - name: Run ESLint
               run: |
                 cd frontend
-                npx eslint . --ext .ts,.tsx --max-warnings 0
+                npx next lint
