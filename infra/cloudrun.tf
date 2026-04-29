@@ -41,6 +41,12 @@ resource "google_service_account_iam_member" "cloudrun_token_creator" {
   member = "serviceAccount:${google_service_account.cloudrun.email}"
 }
 
+resource "google_service_account_iam_member" "cloudrun_service_account_user" {
+  service_account_id = google_service_account.cloudrun.name
+  role               = "roles/iam.serviceAccountUser"
+  member             = "serviceAccount:${google_service_account.cloudrun.email}"
+}
+
 # ── API Service ────────────────────────────────────────────────────────────
 
 resource "google_cloud_run_v2_service" "api" {
