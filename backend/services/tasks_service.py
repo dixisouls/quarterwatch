@@ -64,7 +64,7 @@ async def _enqueue_via_gcp(job_id: uuid.UUID) -> bool:
 
     payload = json.dumps({"job_id": str(job_id)}).encode("utf-8")
 
-    worker_url = f"https://{settings.worker_url}/process"
+    worker_url = f"{settings.worker_url.rstrip("/")}/process"
     service_account = f"quarterwatch-cloudrun@{settings.gcp_project_id}.iam.gserviceaccount.com"
 
     task = {
@@ -75,7 +75,7 @@ async def _enqueue_via_gcp(job_id: uuid.UUID) -> bool:
             "body": payload,
             "oidc_token": {
                 "service_account_email": service_account,
-                "audience": settings.worker_url,
+                "audience": settings.worker_url.rstrip("/"),
             }
         }
     }
