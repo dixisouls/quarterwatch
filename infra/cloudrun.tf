@@ -35,6 +35,12 @@ resource "google_project_iam_member" "cloudrun_vertexai" {
   member  = "serviceAccount:${google_service_account.cloudrun.email}"
 }
 
+resource "google_service_account_iam_member" "cloudrun_token_creator" {
+  service_account_id = google_service_account.cloudrun.name
+  role = "roles/iam.serviceAccountTokenCreator"
+  member = "serviceAccount:${google_service_account.cloudrun.email}"
+}
+
 # ── API Service ────────────────────────────────────────────────────────────
 
 resource "google_cloud_run_v2_service" "api" {
