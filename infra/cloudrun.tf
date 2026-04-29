@@ -91,6 +91,11 @@ resource "google_cloud_run_v2_service" "api" {
       }
 
       env {
+        name  = "FRONTEND_URL"
+        value = var.frontend_url
+      }
+
+      env {
         name = "DATABASE_URL"
         value = "postgresql+asyncpg://postgres:${var.db_password}@/quarterwatch?host=/cloudsql/${google_sql_database_instance.quarterwatch.connection_name}"
       }

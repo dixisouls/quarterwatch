@@ -50,3 +50,9 @@ variable "google_client_secret" {
   type        = string
   sensitive   = true
 }
+
+variable "frontend_url" {
+  description = "Frontend URL for CORS allow-origin"
+  type        = string
+  default     = "https://quarterwatch.vercel.app"
+}
