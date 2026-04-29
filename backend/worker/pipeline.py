@@ -2,7 +2,7 @@ import uuid
 import logging
 
 from backend.database import AsyncSessionLocal
-from backend.models.models import JobStatus, Segment, SentimentResult, SentimentStatus
+from backend.models.models import JobStatus, Segment
 from backend.services.job_service import get_job_by_id, update_job_status
 from backend.services.transcript_service import fetch_transcript
 from backend.services.storage_service import upload_transcript, download_transcript
